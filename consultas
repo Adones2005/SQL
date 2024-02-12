@@ -1,28 +1,5 @@
--- Cuales son los personajes por los cuales es contereado Aatrox
 
-SELECT Nombre
-FROM campeones
-WHERE COUNTER_PRINCIPAL  IN (
-    SELECT ID_CAMPEON 
-    FROM CAMPEONES C 
-  	WHERE Nombre = 'Aatrox'
-);
--- Encuentra el nombre de los jugadores que hallan usado alguna build con coste mayor de 19000
-SELECT DISTINCT j.Nombre
-FROM jugadores j
-JOIN campeones_has_jugadores cj ON j.id_jugador = cj.id_jugador
-JOIN build_has_campeones bc ON cj.id_campeon = bc.Campeones_id_campeon
-JOIN build b ON bc.Build_id_build = b.id_build
-JOIN objetos o1 ON b.id_objetos_1 = o1.id_objetos
-JOIN objetos o2 ON b.id_objetos_2 = o2.id_objetos
-JOIN objetos o3 ON b.id_objetos_3 = o3.id_objetos
-JOIN objetos o4 ON b.id_objetos_4 = o4.id_objetos
-JOIN objetos o5 ON b.id_objetos_5 = o5.id_objetos
-JOIN objetos o6 ON b.id_objetos_6 = o6.id_objetos
-WHERE (o1.Precio + o2.Precio + o3.Precio + o4.Precio + o5.Precio + o6.Precio) > 19000;
-
-
--- Cuales fueron los campeones mas utilizados en el ano 2023.
+-- Cuales fueron los 2 campeones mas utilizados en el ano 2023.
 SELECT c.Nombre AS Campeon, COUNT(*) AS Total_Utilizado
 FROM campeones c
 JOIN campeones_has_jugadores cj ON c.id_campeon = cj.id_campeon
@@ -43,13 +20,6 @@ JOIN torneo t ON p.Torneo = t.id_torneo
 WHERE YEAR(t.Fecha_inicio) BETWEEN 2011 AND 2013
 AND c.Rol = 'Jungla';
 
--- Consulta para encontrar los jugadores que han jugado con al menos tres campeones diferentes en una misma partida.
-
-SELECT j.Nombre, j.Apellido
-FROM jugadores j
-JOIN campeones_has_jugadores cj ON j.id_jugador = cj.id_jugador
-GROUP BY cj.id_partida, j.id_jugador
-HAVING COUNT(DISTINCT cj.id_campeon) >= 3;
 
 -- Consulta para obtener el nombre y el precio de los objetos que han sido utilizados en más de 100 builds.
 
@@ -64,18 +34,6 @@ JOIN build b ON o.id_objetos = b.id_objetos_1
 GROUP BY o.id_objetos
 HAVING COUNT(*) > 25;
 
-
--- Consulta para encontrar los entrenadores que tienen más de 5 años de experiencia.
- 
-SELECT Nombre, Apellido
-FROM entrenadores
-WHERE `Experiencia(years)` > 5;
-
--- Consulta para obtener el nombre del campeón que es el counter principal de sí mismo.
-
-SELECT c.Nombre
-FROM campeones c
-WHERE c.Counter_principal = c.id_campeon;
 
 -- Consulta para encontrar los jugadores que jugaron partidas en un torneo específico.
 
